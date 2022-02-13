@@ -25,9 +25,21 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
-
+require('./myApp')(app);
 
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
+
+// visit app every 20 minutes
+const https = require("https"),
+      url = 'https://header-parser-microservice.dykisa.web.id',
+      every = 20,
+      oneMinute = 60 * 1000;
+console.log(`The app will revisiting itself after ${every} minutes`);
+setInterval(function() {
+  console.log(`Visiting '${url}' by app itself...`);
+  const req = https.get(url);
+  console.log('request', req.finished ? 'completed succesfully.' : 'failed.');
+}, every * oneMinute);
